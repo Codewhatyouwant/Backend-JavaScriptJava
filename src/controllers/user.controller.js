@@ -370,7 +370,7 @@ const updateUserCoverImage = asyncHandler(async (req, res) => {
         { new: true }
     ).select("-password")
     console.log(user)
-    
+
 
     return res
         .status(200)

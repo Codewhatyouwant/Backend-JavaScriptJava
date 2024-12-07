@@ -32,6 +32,14 @@ const userSchema = new Schema({
     coverImage:{
         type: String, // cloudinary url
     },
+    channel:{
+        type: Boolean,
+        default: 0,
+    },
+    videos:[{
+        type: Schema.Types.ObjectId,
+        ref: "UserVideo"
+    }],
     watchHistory:[{
         type: Schema.Types.ObjectId,
         ref: "Video"
