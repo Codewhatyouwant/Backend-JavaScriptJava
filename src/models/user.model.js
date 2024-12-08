@@ -36,6 +36,10 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: 0,
     },
+    channelName:{
+        type: String,
+        default: "",
+    },
     videos: [{
         type: Schema.Types.ObjectId,
         ref: "UserVideo"

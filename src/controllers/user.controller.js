@@ -308,13 +308,32 @@ const updateAccountDetails = asyncHandler(async (req, res) => {
             }
         },
         { new: true }
-    ).select("-password")
+    ).select("-password -accessToken -refreshToken")
 
     return res
         .status(200)
         .json(new ApiResponse(200, user, "Account details updated successfully"))
 
 
+})
+
+const createChannel = asyncHandler(async (req, res) => {
+    const {channelName} = req.body
+    if (!channelName) {
+        throw new ApiError(400, "Channel name is required")
+    }
+    const user = await User.findByIdAndUpdate(req.user?._id,
+        {
+            $set: {
+                channel: 1,
+                channelName: channelName,
+            }
+        }, { new: true }
+    ).select("-password -accessToken -refreshToken")
+
+    return res
+        .status(200)
+        .json(new ApiResponse(200, user, "Channel Created"))
 })
 
 const updateUserAvatar = asyncHandler(async (req, res) => {
@@ -338,7 +357,7 @@ const updateUserAvatar = asyncHandler(async (req, res) => {
         },
         { new: true }
 
-    ).select("-password");
+    ).select("-password -accessToken -refreshToken");
 
     return res
         .status(200)
@@ -368,8 +387,7 @@ const updateUserCoverImage = asyncHandler(async (req, res) => {
             }
         },
         { new: true }
-    ).select("-password")
-    console.log(user)
+    ).select("-password -accessToken -refreshToken")
 
 
     return res
@@ -507,4 +525,4 @@ const getWatchHistory = asyncHandler(async (req, res) => {
 })
 
 
-export { registerUser, loginUser, logoutUser, refreshAccessToken, changeCurrentPassword, getCurrentUser, updateAccountDetails, updateUserAvatar, updateUserCoverImage, getUserChannelProfile, getWatchHistory }
+export { registerUser, loginUser, logoutUser, refreshAccessToken, changeCurrentPassword, getCurrentUser, updateAccountDetails, createChannel, updateUserAvatar, updateUserCoverImage, getUserChannelProfile, getWatchHistory }
