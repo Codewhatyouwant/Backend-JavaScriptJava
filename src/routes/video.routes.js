@@ -1,11 +1,13 @@
 import { Router } from "express";
 import { upload } from "../middlewares/multer.middleware.js";
-import { uploadVideo } from "../controllers/video.controller.js";
+import { DeleteVideo, UploadVideo } from "../controllers/video.controller.js";
+import { verifyJWT } from "../middlewares/auth.middleware.js";
+
 
 
 const router = Router()
 
-router.route("/uplode-video").post(upload.fields(
+router.route("/upload-video").post(verifyJWT,upload.fields(
     [
         {
             name: "videoFile",
@@ -16,6 +18,8 @@ router.route("/uplode-video").post(upload.fields(
             maxCount: 1,
         }
     ]
-), uploadVideo) 
+), UploadVideo) 
+
+router.route("/delete-video").post(verifyJWT,DeleteVideo)
 
 export default router

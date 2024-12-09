@@ -2,7 +2,7 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiResponse } from "../utils/ApiResponse.js"
 import { ApiError } from "../utils/ApiError.js";
 import { User } from "../models/user.model.js";
-import { uploadeOnCloudinary } from "../utils/cloudinary.js"
+import { uploadOnCloudinary } from "../utils/cloudinary.js"
 import jwt from "jsonwebtoken"
 import mongoose from "mongoose"
 
@@ -22,7 +22,7 @@ const generateAccessAndRefereshTokens = async (userId) => {
         return { accessToken, refreshToken }
 
     } catch (error) {
-        throw new ApiError(500, "Something want wrong while generating Access and refresf token");
+        throw new ApiError(500, "Something want wrong while generating Access and refresh token");
 
     }
 }
@@ -36,7 +36,7 @@ const registerUser = asyncHandler(async (req, res) => {
     // }
     // res.status(200).json(
     //     new ApiResponse(
-    //         200, myData, "Register Sucessfull"
+    //         200, myData, "Register Successful"
     //     )
     // )
 
@@ -83,8 +83,8 @@ const registerUser = asyncHandler(async (req, res) => {
         coverImageLocolPath = ""
     }
 
-    const avatar = await uploadeOnCloudinary(avatarLocolPath)
-    const coverImage = await uploadeOnCloudinary(coverImageLocolPath)
+    const avatar = await uploadOnCloudinary(avatarLocolPath)
+    const coverImage = await uploadOnCloudinary(coverImageLocolPath)
 
     if (!avatar) {
         throw new ApiError(400, "failed to upload to cloudinary! Please check the cloudinary function.")
@@ -206,7 +206,7 @@ const logoutUser = asyncHandler(async (req, res) => {
     }
     return res.status(200)
         .clearCookie("accessToken", options)
-        .clearCookie("refeshToken", options)
+        .clearCookie("refreshToken", options)
         .json(new ApiResponse(200, {}, "User Logged Out"))
 
 })
@@ -231,7 +231,7 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
         }
 
         if (incomingRefreshToken !== user.refreshToken) {
-            throw new ApiError(401, "Refresh token is expair or used")
+            throw new ApiError(401, "Refresh token is expire or used")
         }
 
         const options = {
@@ -255,7 +255,7 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
             )
 
     } catch (error) {
-        throw new ApiError(401, "Try faile with this error->" + error?.message
+        throw new ApiError(401, "Try file with this error->" + error?.message
         );
 
     }
@@ -296,7 +296,7 @@ const getCurrentUser = asyncHandler(async (req, res) => {
 const updateAccountDetails = asyncHandler(async (req, res) => {
     const { fullname, username } = req.body
     if (!fullname && !username) {
-        throw new ApiError(400, "Fileds required");
+        throw new ApiError(400, "Fields required");
     }
 
     const user = await User.findByIdAndUpdate(
@@ -343,10 +343,10 @@ const updateUserAvatar = asyncHandler(async (req, res) => {
         throw new ApiError(400, "Avatar file is missing");
     }
 
-    const avatar = await uploadeOnCloudinary(avatarLocalPath)
+    const avatar = await uploadOnCloudinary(avatarLocalPath)
 
     if (!avatar.url) {
-        throw new ApiError(400, "Error while uploding on avatar");
+        throw new ApiError(400, "Error while uploading on avatar");
     }
     const user = await User.findByIdAndUpdate(
         req.user?._id,
@@ -374,10 +374,10 @@ const updateUserCoverImage = asyncHandler(async (req, res) => {
         throw new ApiError(400, "Cover image file is missing");
     }
 
-    const coverImage = await uploadeOnCloudinary(coverImageLocalPath)
+    const coverImage = await uploadOnCloudinary(coverImageLocalPath)
 
     if (!coverImage.url) {
-        throw new ApiError(400, "Error while uploding on cover image");
+        throw new ApiError(400, "Error while uploading on cover image");
     }
     const user = await User.findByIdAndUpdate(
         req.user?._id,

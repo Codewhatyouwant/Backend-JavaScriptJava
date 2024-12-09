@@ -13,22 +13,66 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_API_SECRET // Click 'View API Keys' above to copy your API secret
 });
 
-const uploadeOnCloudinary = async (localFilePath) => {
+const uploadOnCloudinary = async (localFilePath) => {
     try {
         if (!localFilePath) return null
-        const responce = await cloudinary.uploader.upload(localFilePath, {
+        const response = await cloudinary.uploader.upload(localFilePath, {
             resource_type: "auto"
         })
-        // file has been uploded successfully
-        console.log("file is uploded on cloudnary successfully:", responce.url);
+        // file has been uploaded successfully
+        console.log("file is uploaded on cloudinary successfully:", response.url);
         fs.unlinkSync(localFilePath)
-        return responce;
+        return response;
     } catch (error) {
+        console.log("Error while uploading image on cloudinary:", error);
         fs.unlinkSync(localFilePath) // removed the locally saved file
     }
 }
 
-export {uploadeOnCloudinary}
+const uploadOnCloudinaryVideo = async (localFilePath)=> {
+    try {
+        if(!localFilePath) return null 
+        const response = await cloudinary.uploader.upload(localFilePath,{
+
+            resource_type: "video"
+
+        })
+
+        console.log("file is uploaded on cloudinary successfully:", response.url);
+        fs.unlinkSync(localFilePath)
+        return response;
+    } catch (error) {
+        console.log("Error when uploading video on cloudinary in utils folder -> ", error);
+        fs.unlinkSync(localFilePath) // removed the locally saved file
+    }
+}
+
+const deleteVideoFromCloudinary = async(videoId)=>{
+    try {
+        if (!videoId) return null 
+        const response = await cloudinary.uploader.destroy(videoId, {
+            resource_type: "video"
+        })
+        console.log("Video is deleted from cloudinary successfully: ");
+    } catch (error) {
+        console.log("Video was not deleted -> ", error)
+    }
+}
+
+const deleteImageFromCloudinary = async (imageId) => {
+    try {
+        if (!imageId) return null
+        const response = await cloudinary.uploader.destroy(imageId, {
+            resource_type: "image"
+        })
+        console.log("Image is deleted from cloudinary successfully: ");
+    } catch (error) {
+        console.log("Image was not deleted -> ", error)
+    }
+}
+
+
+export { uploadOnCloudinary, uploadOnCloudinaryVideo, deleteVideoFromCloudinary, deleteImageFromCloudinary }
 
 
 
