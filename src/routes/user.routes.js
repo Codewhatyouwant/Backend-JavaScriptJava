@@ -41,5 +41,4 @@ router.route("/c/:username").post(verifyJWT, getUserChannelProfile)
 
 router.route("/history").get(verifyJWT, getWatchHistory)
 
-
 export default router

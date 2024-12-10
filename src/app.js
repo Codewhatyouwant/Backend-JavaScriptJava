@@ -15,6 +15,11 @@ app.use(express.urlencoded({ extended: true, limit: "16kb" }))
 app.use(express.static("public"))
 app.use(cookieParser())
 
+app.use((req, res, next) => {
+    console.log(`Received ${req.method} request with body:`, req.body);
+    console.log(`Received ${req.method} request with params:`, req.params);
+    next();
+});
 
 // routes import 
 import userRouter from './routes/user.routes.js'

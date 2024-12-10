@@ -5,7 +5,7 @@ import { User } from "../models/user.model.js"
 import cookieParser from "cookie-parser"
 
 
-export const verifyJWT = asyncHandler(async (req, _, next) => {
+const verifyJWT = asyncHandler(async (req, _, next) => {
     try {
 
 
@@ -33,3 +33,7 @@ export const verifyJWT = asyncHandler(async (req, _, next) => {
     }
 
 })
+
+
+
+export{verifyJWT}

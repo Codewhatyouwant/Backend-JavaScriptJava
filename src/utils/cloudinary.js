@@ -47,27 +47,47 @@ const uploadOnCloudinaryVideo = async (localFilePath)=> {
     }
 }
 
-const deleteVideoFromCloudinary = async(videoId)=>{
+const deleteVideoFromCloudinary = async(videoLink)=>{
     try {
-        if (!videoId) return null 
-        const response = await cloudinary.uploader.destroy(videoId, {
-            resource_type: "video"
-        })
-        console.log("Video is deleted from cloudinary successfully: ");
+
+        // Extract public_id from the URL
+        const publicId = videoLink.split('/').pop().split('.')[0]; // e.g., mcttrobdbtahynbb8efl
+
+        // Check if the video exists
+        const videoAvailable = await cloudinary.api.resource(publicId, { resource_type: 'video' });
+        console.log('Video exists:', videoAvailable);
+
+        // Delete the video
+        const deleteResponse = await cloudinary.uploader.destroy(publicId, { resource_type: 'video' });
+        console.log('Video is deleted from cloudinary successfully:', deleteResponse);
+
     } catch (error) {
-        console.log("Video was not deleted -> ", error)
+        if (error.http_code === 404) {
+            console.log('Video does not exist.');
+        } else {
+            console.error('Video was not deleted -> ', error);
+        }
     }
 }
 
-const deleteImageFromCloudinary = async (imageId) => {
+const deleteImageFromCloudinary = async(imageLink) => {
     try {
-        if (!imageId) return null
-        const response = await cloudinary.uploader.destroy(imageId, {
-            resource_type: "image"
-        })
-        console.log("Image is deleted from cloudinary successfully: ");
+        // Extract public_id from the URL
+        const publicId = imageLink.split('/').pop().split('.')[0]; 
+
+        // Check if the video exists
+        const imageAvailable = await cloudinary.api.resource(publicId, { resource_type: "image" });
+        console.log('Image exists:', imageAvailable);
+
+        // Delete the video
+        const deleteResponse = await cloudinary.uploader.destroy(publicId, { resource_type: 'image' });
+        console.log('Image is deleted from cloudinary successfully:', deleteResponse);
     } catch (error) {
-        console.log("Image was not deleted -> ", error)
+        if (error.http_code === 404) {
+            console.log('Image does not exist.');
+        } else {
+            console.error('Image was not deleted -> ', error);
+        }
     }
 }
 
