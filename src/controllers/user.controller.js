@@ -56,7 +56,7 @@ const registerUser = asyncHandler(async (req, res) => {
     })
 
     if (existedUser) {
-        throw new ApiError(409, "username or email allready exist")
+        throw new ApiError(409, "username or email already exist")
     }
 
 
@@ -112,6 +112,8 @@ const registerUser = asyncHandler(async (req, res) => {
     }
 
     const { accessToken, refreshToken } = await generateAccessAndRefereshTokens(createdUser._id)
+
+    
     if (!accessToken || !refreshToken) {
         throw new ApiError(500, "Failed to generate access and refresh tokens")
     }

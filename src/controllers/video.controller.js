@@ -128,22 +128,6 @@ const DeleteVideo = asyncHandler(async (req, res) => {
     }
 
 
-    // const videoIndex = user.videos.findIndex(video => video.toString() === videoId.toString());
-    // if (videoIndex !== -1) {
-    //     // Remove the videoId from the videos array
-    //     user.videos.splice(videoIndex, 1);
-
-    //     // Save the updated user document back to the database
-    //     await user.save();
-
-    //     console.log('VideoId removed from user successfully:', user);
-
-    //     await user.save();
-    // } else {
-    //     console.log('Video ID not found in the user videos array');
-    // }
-
-
 
     // const videoDeleted = await 
     return res
@@ -151,9 +135,5 @@ const DeleteVideo = asyncHandler(async (req, res) => {
         .json(new ApiResponse(200, { response }, "Video deleted successfully"))
 })
 
-// const DeleteImage = asyncHandler(async(req,res)=>{
-//     const {imageId} = req.body;
-//     const user = await User.findById(req.user?._id)
-// })
 
 export { UploadVideo, DeleteVideo };
